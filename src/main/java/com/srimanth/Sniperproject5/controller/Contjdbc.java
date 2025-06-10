@@ -21,8 +21,8 @@ Servicejdbc sc;
 	public Pojojdbc insert(@RequestBody Pojojdbc e) {
 		return sc.saveAll(e);
 	}
-	 @GetMapping("/get")
-	public List<Pojojdbc> getAll(){
-		return sc.getAll();
-	}
+//	 @GetMapping("/get")
+//	public List<Pojojdbc> getAll(){
+//		return sc.getAll();
+//	}
 }
