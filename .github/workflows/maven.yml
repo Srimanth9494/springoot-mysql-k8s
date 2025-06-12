@@ -1,0 +1,35 @@
+name: Sealights Build and Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  sealights:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Build with Maven
+      run: mvn clean package
+
+    - name: Download SeaLights CLI
+      run: curl -sSL "https://agents.sealights.co/sealights-cli/install.sh" | bash
+
+    - name: Upload Build to SeaLights
+      run: |
+        ./slcli integration-build start \
+          --token ${{ secrets.SEALIGHTS_TOKEN }} \
+          --app-name "system32B" \
+          --branch-name ${{ github.ref_name }} \
+          --build-name "build-${{ github.run_number }}" \
+          --workspace-path ./target
